@@ -1,0 +1,5 @@
+name: aws-node-http-api-docker-starter
+description: A Serverless Typescript Template With Docker Development Environment
+keywords: aws, serverless, faas, lambda, node, typescript, docker, dynamodb
+repo: https://github.com/codetheworld-io/aws-node-http-api-docker-starter
+license: MIT

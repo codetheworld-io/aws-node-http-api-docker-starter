@@ -1,0 +1,5 @@
+.vscode
+.esbuild
+docker
+node_modules
+coverage

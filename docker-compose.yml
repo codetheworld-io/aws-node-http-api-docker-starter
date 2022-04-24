@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      network: "host"
+    ports:
+      - "4000:4000"
+    volumes:
+      - "./migrations:/usr/app/migrations"
+      - "./src:/usr/app/src"
+      - "./serverless.ts:/usr/app/serverless.ts"
+      - "./tsconfig.build.json:/usr/app/tsconfig.build.json"
+      - "./tsconfig.json:/usr/app/tsconfig.json"
+      - "./tsconfig.paths.json:/usr/app/tsconfig.paths.json"
+    depends_on:
+      dynamodb-local:
+        condition: service_healthy
+    environment:
+      DYNAMO_ENDPOINT: http://dynamodb-local:8000
+      AWS_ACCESS_KEY_ID: 'DUMMYIDEXAMPLE'
+      AWS_SECRET_ACCESS_KEY: 'DUMMYEXAMPLEKEY'
+      REGION: 'eu-west-1'
+  dynamodb-admin:
+    image: aaronshaf/dynamodb-admin
+    tty: true
+    ports:
+      - "8001:8001"
+    depends_on:
+      dynamodb-local:
+        condition: service_healthy
+    environment:
+      DYNAMO_ENDPOINT: http://dynamodb-local:8000
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    working_dir: /home/dynamodblocal
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./docker/dynamodb:/home/dynamodblocal/data"
+    healthcheck:
+      test: "curl http://localhost:8000"
+      interval: 10s
+      timeout: 5s
+      retries: 5

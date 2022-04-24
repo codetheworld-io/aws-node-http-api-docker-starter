@@ -1,0 +1,29 @@
+### Create movie
+POST {{baseUrl}}/movies
+Content-Type: application/json
+
+{
+  "title": "New movie",
+  "year": 2022
+}
+
+### List movie by year
+GET {{baseUrl}}/movies/2000?nextPageToken={{nextPageToken}}
+
+> {%
+client.global.set('nextPageToken', response.body.nextPageToken)
+%}
+
+### Get movie detail
+GET {{baseUrl}}/movies/What Lies Beneath/2000
+
+### Delete movie
+DELETE {{baseUrl}}/movies/What Lies Beneath/2000
+
+### Update movie info
+PUT {{baseUrl}}/movies/New movie/2022
+Content-Type: application/json
+
+{
+  "rank": 1000
+}

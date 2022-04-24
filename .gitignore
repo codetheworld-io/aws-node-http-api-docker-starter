@@ -1,0 +1,23 @@
+# package directories
+node_modules
+jspm_packages
+
+# Serverless directories
+.serverless
+
+# esbuild directories
+.esbuild
+
+# IDE config
+.vscode
+.idea
+
+# Unit test coverage
+coverage
+
+# Docker data
+docker/dynamodb/*
+!docker/dynamodb/.keepme
+
+# Os temporary
+.DS_Store
