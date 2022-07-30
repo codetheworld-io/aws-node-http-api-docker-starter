@@ -1,11 +1,10 @@
 import movieRepository, {
   ICreateMovieDTO,
-  IMovie,
-  IMovieInfo, IMovieKey,
   UpdateMovieInfoDTO,
 } from '@repositories/movie.repository';
 import AppError from '@libs/app.error';
 import * as movieService from '@functions/movies/movie.service';
+import { IMovie, IMovieKey, IMovieInfo } from '@models/movie.model';
 import { IMoviesByYearResponse } from './movie.service';
 
 describe('MovieService', () => {

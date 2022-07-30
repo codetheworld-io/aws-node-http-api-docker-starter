@@ -10,7 +10,9 @@ describe('BaseRepository', () => {
   let repository: BaseRepository<typeof key, typeof data>;
 
   beforeEach(() => {
-    repository = new BaseRepository<typeof key, typeof data>(tableName);
+    repository = new class extends BaseRepository<typeof key, typeof data> {
+      protected tableName = tableName;
+    }();
   });
 
   describe('upsert()', () => {

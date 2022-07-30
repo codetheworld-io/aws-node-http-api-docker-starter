@@ -4,18 +4,15 @@ import ddbDoc from '@libs/ddb-doc';
 
 export type QueryInput = Omit<DocumentClient.QueryInput, 'TableName'>;
 
-export interface IPagingData<TData, TKey extends DocumentClient.Key = DocumentClient.Key> {
-  data: TData[],
+export interface IPagingData<TModel, TKey extends DocumentClient.Key = DocumentClient.Key> {
+  data: TModel[],
   lastEvaluatedKey?: TKey;
 }
 
-export default class BaseRepository<TKey extends DocumentClient.Key, TData extends TKey> {
-  constructor(
-    private readonly tableName: string,
-  ) {
-  }
+export default abstract class BaseRepository<TKey extends DocumentClient.Key, TModel extends TKey> {
+  protected abstract readonly tableName: string;
 
-  async upsert(item: TKey & Partial<TData>): Promise<TData> {
+  async upsert(item: TKey & Partial<TModel>): Promise<TModel> {
     const params: DocumentClient.PutItemInput = {
       TableName: this.tableName,
       Item: item,
@@ -23,10 +20,10 @@ export default class BaseRepository<TKey extends DocumentClient.Key, TData exten
 
     await ddbDoc.put(params).promise();
 
-    return item as TData;
+    return item as TModel;
   }
 
-  async getByKey(key: TKey): Promise<TData | null> {
+  async getByKey(key: TKey): Promise<TModel | null> {
     const params: DocumentClient.GetItemInput = {
       TableName: this.tableName,
       Key: key,
@@ -34,10 +31,10 @@ export default class BaseRepository<TKey extends DocumentClient.Key, TData exten
 
     const response = await ddbDoc.get(params).promise();
 
-    return response.Item as TData;
+    return response.Item as TModel;
   }
 
-  async updateByKey(key: TKey, updateObject: Partial<TData>): Promise<TData> {
+  async updateByKey(key: TKey, updateObject: Partial<TModel>): Promise<TModel> {
     const updateExpressions: string[] = [];
     const expressionAttributeNames: DocumentClient.ExpressionAttributeNameMap = {};
     const expressionAttributeValues: DocumentClient.ExpressionAttributeValueMap = {};
@@ -61,7 +58,7 @@ export default class BaseRepository<TKey extends DocumentClient.Key, TData exten
 
     const { Attributes } = await ddbDoc.update(params).promise();
 
-    return Attributes as TData;
+    return Attributes as TModel;
   }
 
   async deleteByKey(key: TKey): Promise<void> {
@@ -73,7 +70,7 @@ export default class BaseRepository<TKey extends DocumentClient.Key, TData exten
     await ddbDoc.delete(params).promise();
   }
 
-  protected async query(query: QueryInput): Promise<IPagingData<TData, TKey>> {
+  protected async query(query: QueryInput): Promise<IPagingData<TModel, TKey>> {
     const params: DocumentClient.QueryInput = {
       TableName: this.tableName,
       ...query,
@@ -82,7 +79,7 @@ export default class BaseRepository<TKey extends DocumentClient.Key, TData exten
     const { Items, LastEvaluatedKey } = await ddbDoc.query(params).promise();
 
     return {
-      data: Items as TData[],
+      data: Items as TModel[],
       lastEvaluatedKey: LastEvaluatedKey as TKey,
     };
   }

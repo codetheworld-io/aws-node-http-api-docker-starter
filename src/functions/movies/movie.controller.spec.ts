@@ -7,10 +7,10 @@ import * as movieService from '@functions/movies/movie.service';
 import { IMoviesByYearResponse } from '@functions/movies/movie.service';
 import {
   ICreateMovieDTO,
-  IMovie,
   UpdateMovieInfoDTO,
 } from '@repositories/movie.repository';
 import { ICustomAPIGatewayProxyEvent } from '@libs/api-gateway';
+import { IMovie } from '@models/movie.model';
 import * as controller from './movie.controller';
 
 describe('MovieController', () => {

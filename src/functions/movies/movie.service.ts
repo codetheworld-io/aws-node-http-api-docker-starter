@@ -1,10 +1,8 @@
 /* eslint-disable camelcase */
 import AppError from '@libs/app.error';
+import { IMovie, IMovieInfo, IMovieKey } from '@models/movie.model';
 import movieRepository, {
   ICreateMovieDTO,
-  IMovie,
-  IMovieInfo,
-  IMovieKey,
   UpdateMovieInfoDTO,
 } from '@repositories/movie.repository';
 

@@ -8,6 +8,9 @@
       "@libs/*": [
         "src/libs/*"
       ],
+      "@models/*": [
+        "src/models/*"
+      ],
       "@repositories/*": [
         "src/repositories/*"
       ]
